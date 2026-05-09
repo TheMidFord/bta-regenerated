@@ -82,7 +82,15 @@ public abstract class EntityPlayerMixin implements RegenerationDataAccess {
 			thisAs.world.playSoundAtEntity(thisAs, thisAs, "regenerated:regen", 0.3F, 1.0F / (MASTER_RANDOM.nextFloat() * 0.4F + 0.8F));
 			regenerationTicksElapsed = 0;
 			regensLeft--;
-			thisAs.sendMessage("You have " + regensLeft + " regenerations left");
+			if (regensLeft > 1) {
+				thisAs.sendMessage("You have " + regensLeft + " regenerations left");
+			}
+			if (regensLeft == 1) {
+				thisAs.sendMessage("You have " + regensLeft + " regeneration left. ...Mind the gap.");
+			}
+			if (regensLeft == 0){
+				thisAs.sendMessage("You have ran out of regenerations. ...Mistakes are now fatal.");
+			}
 			cir.cancel();
 		}
 	}

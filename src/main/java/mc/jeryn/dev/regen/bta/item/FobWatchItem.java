@@ -19,7 +19,7 @@ public class FobWatchItem extends Item {
 		RegenerationDataAccess playerRegenData = (RegenerationDataAccess) entityplayer;
 		playerRegenData.setRegensLeft(12);
 		itemstack.stackSize = 0;
-		entityplayer.sendMessage("You now " + playerRegenData.getRegensLeft() + " regenerations!");
+		entityplayer.sendMessage("You now have" + playerRegenData.getRegensLeft() + " regenerations!");
 		return super.onUseItem(itemstack, world, entityplayer);
 	}
 
