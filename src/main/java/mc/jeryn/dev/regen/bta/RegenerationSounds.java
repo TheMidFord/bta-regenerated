@@ -1,13 +1,16 @@
 package mc.jeryn.dev.regen.bta;
 
+import net.minecraft.client.sound.SoundRepository;
 import net.minecraft.core.sound.SoundTypes;
-import turniplabs.halplibe.helper.SoundHelper;
+
+import static mc.jeryn.dev.regen.bta.Regeneration.MOD_ID;
+
 
 public class RegenerationSounds {
 
 	public static void init(){
-		SoundTypes.register("regenerated.regen");
-		SoundHelper.addSound(Regeneration.MOD_ID, "regen.ogg");
+		SoundTypes.loadSoundsJson("regenerated");
+		SoundRepository.registerNamespace(MOD_ID);
 	}
 
 }

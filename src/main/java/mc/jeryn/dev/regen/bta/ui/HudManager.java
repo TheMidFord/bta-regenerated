@@ -1,13 +1,12 @@
 package mc.jeryn.dev.regen.bta.ui;
 
 import mc.jeryn.dev.regen.bta.Regeneration;
-import net.minecraft.client.gui.hud.ComponentAnchor;
-import net.minecraft.client.gui.hud.HudComponent;
-import net.minecraft.client.gui.hud.HudComponents;
-import net.minecraft.client.gui.hud.SnapLayout;
+import net.minecraft.client.gui.hud.component.ComponentAnchor;
+import net.minecraft.client.gui.hud.component.HudComponent;
+import net.minecraft.client.gui.hud.component.HudComponents;
+import net.minecraft.client.gui.hud.component.layout.LayoutSnap;
 
 public class HudManager {
-
 	/*private static final HudComponent REGEN_HUD = HudComponents.register(new RegenHudComponent(
 		"regen_hud",
 		182, 7,

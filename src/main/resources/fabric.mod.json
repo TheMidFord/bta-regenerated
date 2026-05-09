@@ -29,7 +29,10 @@
     ],
     "recipesReady": [
 			"mc.jeryn.dev.regen.bta.Regeneration"
-    ]
+    ],
+		"initModels": [
+			"mc.jeryn.dev.regen.bta.ModModels"
+		]
   },
   "mixins": [
     "regenerated.mixins.json"

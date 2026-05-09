@@ -4,9 +4,9 @@ import mc.jeryn.dev.regen.bta.access.RegenerationDataAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.model.ModelPlayer;
 import net.minecraft.client.render.tessellator.Tessellator;
-import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.util.helper.MathHelper;
-import net.minecraft.core.util.phys.Vec3d;
+import net.minecraft.core.util.phys.Vec3;
 import org.lwjgl.opengl.GL11;
 
 
@@ -15,7 +15,7 @@ public class RenderRegenerationLayer {
 	private static float primaryRed = 0.93f, primaryGreen = 0.61f, primaryBlue = 0.0f;
 	private static float secondaryRed = 1f, secondaryGreen = 0.5f, secondaryBlue = 0.18f;
 
-	public static void renderSpecials(ModelPlayer modelPlayer, EntityPlayer entity, float partialTick) {
+	public static void renderSpecials(ModelPlayer modelPlayer, Player entity, float partialTick) {
 		RegenerationDataAccess playerRegenData = (RegenerationDataAccess) entity;
 
 		if (playerRegenData != null && playerRegenData.getRegenerationTicksElapsed() > 0) {
@@ -29,8 +29,8 @@ public class RenderRegenerationLayer {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 			GL11.glDepthMask(true);
 
-			Vec3d primaryColor = Vec3d.createVector(primaryRed, primaryGreen, primaryBlue);
-			Vec3d secondaryColor = Vec3d.createVector(secondaryRed, secondaryGreen, secondaryBlue);
+			Vec3 primaryColor = Vec3.getPermanentVec3(primaryRed, primaryGreen, primaryBlue);
+			Vec3 secondaryColor = Vec3.getPermanentVec3(secondaryRed, secondaryGreen, secondaryBlue);
 
 			double x = playerRegenData.getRegenerationTicksElapsed();
 			double p = 109.89010989010987;
@@ -44,7 +44,7 @@ public class RenderRegenerationLayer {
 // Render head cone
 			GL11.glPushMatrix();
 
-			modelPlayer.bipedHead.postRender(0.0625F);
+			modelPlayer.head.render(0.0625F);
 
 			GL11.glTranslatef(0f, 0.1f, 0f);
 			GL11.glRotatef(180, 1.0f, 0.0f, 0.0f);
@@ -56,14 +56,14 @@ public class RenderRegenerationLayer {
 
 			// Render head cone
 			GL11.glPushMatrix();
-			modelPlayer.bipedLeftArm.postRender(0.0625F);
+			modelPlayer.armLeft.render(0.0625F);
 			renderCone(entity, primaryScale / 1.6F, primaryScale * .75F, primaryColor, partialTick, false);
 			renderCone(entity, secondaryScale / 1.6F, secondaryScale / 1.5F, secondaryColor, partialTick, false);
 			GL11.glPopMatrix();
 
 			// Render head cone
 			GL11.glPushMatrix();
-			modelPlayer.bipedRightArm.postRender(0.0625F);
+			modelPlayer.armRight.render(0.0625F);
 			renderCone(entity, primaryScale / 1.6F, primaryScale * .75F, primaryColor, partialTick, true);
 			renderCone(entity, secondaryScale / 1.6F, secondaryScale / 1.5F, secondaryColor, partialTick, true);
 			GL11.glPopMatrix();
@@ -79,7 +79,7 @@ public class RenderRegenerationLayer {
 		}
 	}
 
-	public static void renderCone(EntityPlayer entityPlayer, float scale, float scale2, Vec3d color, float partialTicks, boolean mirrorRor) {
+	public static void renderCone(Player entityPlayer, float scale, float scale2, Vec3 color, float partialTicks, boolean mirrorRor) {
 		Tessellator tessellator = Tessellator.instance;
 
 		for (int i = 0; i < 8; i++) {
@@ -93,7 +93,7 @@ public class RenderRegenerationLayer {
 			for (int j = 0; j <= 1; j++) {
 				float alpha = 0.65F * (1 - j * 0.5F); // Fade effect
 				tessellator.startDrawingQuads();
-				tessellator.setColorRGBA_F((float) color.xCoord, (float) color.yCoord, (float) color.zCoord, alpha);
+				tessellator.setColorRGBA_F((float) color.x, (float) color.y, (float) color.z, alpha);
 
 				// Central vertex
 				tessellator.addVertex(0.0D, 0.0D, 0.0D);

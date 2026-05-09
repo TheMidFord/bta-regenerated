@@ -13,9 +13,8 @@ public final class ModItems {
 
 	public static void init() {
 		fob_watch = new ItemBuilder(Regeneration.MOD_ID)
-			.setIcon("regenerated:item/fob_watch")
 			.setStackSize(1)
-			.build(new FobWatchItem("fob_watch", Regeneration.regenConfig.getFobWatchID()));
+			.build(new FobWatchItem("fob_watch","regen:item/fob_watch", Regeneration.regenConfig.getFobWatchID()));
 
 	}
 }

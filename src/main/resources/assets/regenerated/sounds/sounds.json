@@ -1,0 +1,8 @@
+{
+  "regen": {
+    "subtitle": "subtitles.regen.player.regenerating",
+    "sounds": [
+      "regen.ogg"
+    ]
+  }
+}

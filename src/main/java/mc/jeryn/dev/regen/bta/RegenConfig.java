@@ -23,7 +23,7 @@ public class RegenConfig {
 		toml.addCategory("Loot")
 			.addEntry("fobWatchWeight", 10);
 
-		config = new TomlConfigHandler(null, MOD_ID, toml);
+		config = new TomlConfigHandler(MOD_ID,toml,true);
 	}
 
 	private final boolean allowSkinChanging;

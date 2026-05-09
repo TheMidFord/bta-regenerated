@@ -23,7 +23,7 @@ public class WorldGenLabyrinthMixin {
 	@Shadow
 	public WeightedRandomBag<WeightedRandomLootObject> chestLoot;
 
-	@Inject(method = "generate",at = @At("TAIL"))
+	@Inject(method = "place",at = @At("TAIL"))
 	private void init(World world, Random random, int x, int y, int z, CallbackInfoReturnable<Boolean> cir){
 		this.chestLoot.addEntry(new WeightedRandomLootObject(ModItems.fob_watch.getDefaultStack()), Regeneration.regenConfig.getFobWatchWeight());
 	}

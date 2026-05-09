@@ -1,11 +1,12 @@
 package mc.jeryn.dev.regen.bta.access;
 
-import net.minecraft.core.entity.player.EntityPlayer;
+
+import net.minecraft.core.entity.player.Player;
 
 public interface ModelPlayerAccess {
 
 
-	public void setLivingEntity(EntityPlayer player);
+	public void setLivingEntity(Player player);
 
-	public EntityPlayer getLivingEntity();
+	public Player getLivingEntity();
 }

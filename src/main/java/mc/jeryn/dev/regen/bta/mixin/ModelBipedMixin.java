@@ -4,35 +4,37 @@ import mc.jeryn.dev.regen.bta.access.ModelPlayerAccess;
 import mc.jeryn.dev.regen.bta.access.RegenerationDataAccess;
 import net.minecraft.client.render.model.ModelBiped;
 import net.minecraft.client.render.model.ModelPlayer;
-import net.minecraft.core.entity.player.EntityPlayer;
+
+import net.minecraft.core.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static mc.jeryn.dev.regen.bta.Regeneration.MASTER_RANDOM;
-import static net.minecraft.client.render.model.ModelPlayer.func_178685_a;
+import static net.minecraft.client.render.model.ModelPlayer.copyTranslation;
+
 
 @Mixin({ModelPlayer.class, ModelBiped.class})
 public class ModelBipedMixin implements ModelPlayerAccess {
 
-	private EntityPlayer player;
+	private Player player;
 
 
 	@Override
-	public void setLivingEntity(EntityPlayer player) {
+	public void setLivingEntity(Player player) {
 		this.player = player;
 	}
 
 	@Override
-	public EntityPlayer getLivingEntity() {
+	public Player getLivingEntity() {
 		return player;
 	}
 
 	private final ModelBiped thisAs = (ModelBiped) ((Object) this);
 
 
-	@Inject(method = "setRotationAngles(FFFFFF)V", at = @At("HEAD"), cancellable = true, remap = false)
+	@Inject(method = "setupAnimation(FFFFFF)V", at = @At("HEAD"), cancellable = true, remap = false)
 	public void setRotationAngles(float limbSwing, float limbYaw, float limbPitch, float headYaw, float headPitch, float scale, CallbackInfo ci) {
 
 		RegenerationDataAccess playerRegenData = (RegenerationDataAccess) getLivingEntity();
@@ -58,42 +60,42 @@ public class ModelBipedMixin implements ModelPlayerAccess {
 
 
 			// ARMS
-			thisAs.bipedLeftArm.rotateAngleY = 0;
-			thisAs.bipedRightArm.rotateAngleY = 0;
+			thisAs.armLeft.yRot = 0;
+			thisAs.armRight.yRot = 0;
 
-			thisAs.bipedLeftArm.rotateAngleX = 0;
-			thisAs.bipedRightArm.rotateAngleX = 0;
+			thisAs.armLeft.xRot = 0;
+			thisAs.armRight.xRot = 0;
 
-			thisAs.bipedLeftArm.rotateAngleZ = (float) -Math.toRadians(armRotZ + armShake);
-			thisAs.bipedRightArm.rotateAngleZ = (float) Math.toRadians(armRotZ + armShake);
-			thisAs.bipedLeftArm.rotateAngleY = (float) -Math.toRadians(armRotY);
-			thisAs.bipedRightArm.rotateAngleY = (float) Math.toRadians(armRotY);
+			thisAs.armLeft.zRot = (float) -Math.toRadians(armRotZ + armShake);
+			thisAs.armRight.zRot = (float) Math.toRadians(armRotZ + armShake);
+			thisAs.armLeft.yRot = (float) -Math.toRadians(armRotY);
+			thisAs.armRight.yRot = (float) Math.toRadians(armRotY);
 
 			// BODY
-			thisAs.bipedBody.rotateAngleX = 0;
-			thisAs.bipedBody.rotateAngleY = 0;
-			thisAs.bipedBody.rotateAngleZ = 0;
+			thisAs.body.xRot = 0;
+			thisAs.body.yRot = 0;
+			thisAs.body.zRot = 0;
 
 			// LEGS
-			thisAs.bipedLeftLeg.rotateAngleY = 0;
-			thisAs.bipedRightLeg.rotateAngleY = 0;
+			thisAs.legLeft.yRot = 0;
+			thisAs.legRight.yRot = 0;
 
-			thisAs.bipedLeftLeg.rotateAngleX = 0;
-			thisAs.bipedRightLeg.rotateAngleX = 0;
+			thisAs.legLeft.xRot = 0;
+			thisAs.legRight.xRot = 0;
 
-			thisAs.bipedLeftLeg.rotateAngleZ = (float) -Math.toRadians(5);
-			thisAs.bipedRightLeg.rotateAngleZ = (float) Math.toRadians(5);
+			thisAs.legLeft.zRot = (float) -Math.toRadians(5);
+			thisAs.legRight.zRot = (float) Math.toRadians(5);
 
-			thisAs.bipedHead.rotateAngleX = (float) Math.toRadians(-headRot);
-			thisAs.bipedHead.rotateAngleY = (float) Math.toRadians(0);
-			thisAs.bipedHead.rotateAngleZ = (float) Math.toRadians(0);
+			thisAs.head.xRot = (float) Math.toRadians(-headRot);
+			thisAs.head.yRot = (float) Math.toRadians(0);
+			thisAs.head.zRot = (float) Math.toRadians(0);
 
 			copyAll();
 			ci.cancel();
 		} else {
 			// Resets the legs, since Minecraft doesn't actually do this on its own
-			thisAs.bipedLeftLeg.rotateAngleZ = 0;
-			thisAs.bipedRightLeg.rotateAngleZ = 0;
+			thisAs.legLeft.zRot = 0;
+			thisAs.legRight.zRot = 0;
 		}
 	}
 
@@ -101,13 +103,13 @@ public class ModelBipedMixin implements ModelPlayerAccess {
 	private void copyAll() {
 		if(thisAs instanceof ModelPlayer) {
 			ModelPlayer modelPlayer = (ModelPlayer) thisAs;
-			func_178685_a(thisAs.bipedLeftLeg, modelPlayer.bipedLeftLegOverlay);
-			func_178685_a(thisAs.bipedRightLeg, modelPlayer.bipedRightLegOverlay);
-			func_178685_a(thisAs.bipedLeftArm, modelPlayer.bipedLeftArmOverlay);
-			func_178685_a(thisAs.bipedRightArm, modelPlayer.bipedRightArmOverlay);
-			func_178685_a(thisAs.bipedBody, modelPlayer.bipedBodyOverlay);
+			copyTranslation(thisAs.legLeft, modelPlayer.bipedLeftLegOverlay);
+			copyTranslation(thisAs.legRight, modelPlayer.bipedRightLegOverlay);
+			copyTranslation(thisAs.armLeft, modelPlayer.bipedLeftArmOverlay);
+			copyTranslation(thisAs.armRight, modelPlayer.bipedRightArmOverlay);
+			copyTranslation(thisAs.body, modelPlayer.bipedBodyOverlay);
 		}
-		func_178685_a(thisAs.bipedHead, thisAs.bipedHeadOverlay);
+		copyTranslation(thisAs.head, thisAs.hair);
 	}
 
 

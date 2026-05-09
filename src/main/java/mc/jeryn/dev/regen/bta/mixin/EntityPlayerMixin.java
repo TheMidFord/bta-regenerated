@@ -1,11 +1,12 @@
 package mc.jeryn.dev.regen.bta.mixin;
 
-import com.mojang.nbt.CompoundTag;
+
+import com.mojang.nbt.tags.CompoundTag;
 import mc.jeryn.dev.regen.bta.access.RegenerationDataAccess;
 import mc.jeryn.dev.regen.bta.skin.SkinDownloader;
 import net.minecraft.core.entity.Entity;
-import net.minecraft.core.entity.EntityLiving;
-import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.entity.Mob;
+import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.util.helper.DamageType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,11 +18,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static mc.jeryn.dev.regen.bta.Regeneration.MASTER_RANDOM;
 import static mc.jeryn.dev.regen.bta.Regeneration.regenConfig;
 
-@Mixin(EntityPlayer.class)
+@Mixin(Player.class)
 public abstract class EntityPlayerMixin implements RegenerationDataAccess {
 
 	@Unique
-	private final EntityPlayer thisAs = (EntityPlayer) ((Object) this);
+	private final Player thisAs = (Player) ((Object) this);
 
 	@Unique
 	int regenerationTicksElapsed = -1;
@@ -54,8 +55,8 @@ public abstract class EntityPlayerMixin implements RegenerationDataAccess {
 		isSlim = slim;
 	}
 
-	@Inject(method = "killed(Lnet/minecraft/core/entity/EntityLiving;)V", at = @At("HEAD"), cancellable = true, remap = false)
-	public void killed(EntityLiving entityliving, CallbackInfo ci) {
+	@Inject(method = "killed(Lnet/minecraft/core/entity/Mob;)V", at = @At("HEAD"), cancellable = true, remap = false)
+	public void killed(Mob entityliving, CallbackInfo ci) {
 		setSkin("");
 	}
 
@@ -78,7 +79,7 @@ public abstract class EntityPlayerMixin implements RegenerationDataAccess {
 		// Stop Death!
 		if (thisAs.getHealth() - damage <= 0 && regensLeft > 0) {
 			thisAs.setHealthRaw(thisAs.getMaxHealth());
-			thisAs.world.playSoundAtEntity(thisAs, thisAs, "regenerated.regen", 0.3F, 1.0F / (MASTER_RANDOM.nextFloat() * 0.4F + 0.8F));
+			thisAs.world.playSoundAtEntity(thisAs, thisAs, "regenerated:regen", 0.3F, 1.0F / (MASTER_RANDOM.nextFloat() * 0.4F + 0.8F));
 			regenerationTicksElapsed = 0;
 			regensLeft--;
 			thisAs.sendMessage("You have " + regensLeft + " regenerations left");
@@ -91,7 +92,7 @@ public abstract class EntityPlayerMixin implements RegenerationDataAccess {
 		tickRegeneration(thisAs);
 	}
 
-	private void tickRegeneration(EntityPlayer player) {
+	private void tickRegeneration(Player player) {
 		// Tick up
 		if (regenerationTicksElapsed >= 0 && regenerationTicksElapsed < REGEN_DURATION) {
 			regenerationTicksElapsed++;
@@ -108,14 +109,14 @@ public abstract class EntityPlayerMixin implements RegenerationDataAccess {
 		}
 	}
 
-	@Inject(method = "readAdditionalSaveData(Lcom/mojang/nbt/CompoundTag;)V", at = @At("HEAD"), cancellable = true, remap = false)
+	@Inject(method = "readAdditionalSaveData(Lcom/mojang/nbt/tags/CompoundTag;)V", at = @At("HEAD"), cancellable = true, remap = false)
 	public void readAdditionalSaveData(CompoundTag tag, CallbackInfo ci) {
 		regensLeft = tag.getInteger("regenerations_left");
 		regenerationTicksElapsed = tag.getInteger("regeneration_timer");
 		skin = tag.getString("regeneration_skin");
 	}
 
-	@Inject(method = "addAdditionalSaveData(Lcom/mojang/nbt/CompoundTag;)V", at = @At("HEAD"), cancellable = true, remap = false)
+	@Inject(method = "addAdditionalSaveData(Lcom/mojang/nbt/tags/CompoundTag;)V", at = @At("HEAD"), cancellable = true, remap = false)
 	public void addAdditionalSaveData(CompoundTag tag, CallbackInfo ci) {
 		tag.putInt("regenerations_left", regensLeft);
 		tag.putInt("regeneration_timer", regenerationTicksElapsed);
