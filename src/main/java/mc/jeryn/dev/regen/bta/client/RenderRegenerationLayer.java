@@ -56,14 +56,14 @@ public class RenderRegenerationLayer {
 
 			// Render head cone
 			GL11.glPushMatrix();
-			modelPlayer.armLeft.render(0.0625F);
+			modelPlayer.armLeft.translateTo(0.0625F);
 			renderCone(entity, primaryScale / 1.6F, primaryScale * .75F, primaryColor, partialTick, false);
 			renderCone(entity, secondaryScale / 1.6F, secondaryScale / 1.5F, secondaryColor, partialTick, false);
 			GL11.glPopMatrix();
 
 			// Render head cone
 			GL11.glPushMatrix();
-			modelPlayer.armRight.render(0.0625F);
+			modelPlayer.armRight.translateTo(0.0625F);
 			renderCone(entity, primaryScale / 1.6F, primaryScale * .75F, primaryColor, partialTick, true);
 			renderCone(entity, secondaryScale / 1.6F, secondaryScale / 1.5F, secondaryColor, partialTick, true);
 			GL11.glPopMatrix();

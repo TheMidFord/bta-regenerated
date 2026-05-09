@@ -15,7 +15,7 @@ public class RegenConfig {
 		Toml toml = new Toml(MOD_ID.toUpperCase(Locale.ROOT));
 
 		toml.addCategory("Skin Changing")
-			.addEntry("allowSkinChanging", false);
+			.addEntry("allowSkinChanging", true);
 
 		toml.addCategory("Item Ids")
 			.addEntry("fobWatchID", 20007);
